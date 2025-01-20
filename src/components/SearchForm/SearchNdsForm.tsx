@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
-import { searchNdsById } from "../model/api/ndsApi";
+import { searchNdsById } from "../../model/api/ndsApi";
+import { SearchFormValues, SearchNdsFormProps } from "./types";
 
-const SearchNdsForm: React.FC<{ onSearch: (data: any) => void }> = ({
-  onSearch,
-}) => {
+const SearchNdsForm: React.FC<SearchNdsFormProps> = ({ onSearch }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleFinish = async (values: { id: string }) => {
+  const handleFinish = async (values: SearchFormValues) => {
     setLoading(true);
     try {
       const result = await searchNdsById(values.id);
       onSearch(result);
       message.success("Товар найден!");
     } catch (error) {
-      if (error instanceof Error) {
-        message.error(error.message);
-      } else {
-        message.error("Произошла ошибка при поиске товара.");
-      }
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Произошла ошибка при поиске товара.";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
-
-interface AuthProps {
-  onSuccess: () => void;
-}
+import { AuthFormValues, AuthProps } from "./types";
 
 const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [token, setToken] = useState<string>("");
 
-  const handleSubmit = async (values: { token: string }) => {
+  const handleSubmit = async (values: AuthFormValues) => {
     setLoading(true);
     try {
       localStorage.setItem("authToken", values.token);
-      setToken(values.token);
-      onSuccess();
       message.success("Токен успешно сохранен!");
+      onSuccess();
     } catch (error) {
       message.error("Ошибка при сохранении токена.");
     } finally {
@@ -30,11 +25,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
         name="token"
         rules={[{ required: true, message: "Пожалуйста, введите токен!" }]}
       >
-        <Input.Password
-          value={token}
-          onChange={(e) => setToken(e.target.value)}
-          placeholder="Введите ваш JWT токен"
-        />
+        <Input.Password placeholder="Введите ваш JWT токен" />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={loading}>

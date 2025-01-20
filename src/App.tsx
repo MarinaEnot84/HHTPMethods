@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Layout } from "antd";
-import Auth from "./components/Auth";
-import NdsTable from "./components/NdsTable";
+import Auth from "./components/Auth/Auth";
+import NdsTable from "./components/Table/NdsTable";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
