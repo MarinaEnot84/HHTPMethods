@@ -114,11 +114,11 @@ const NdsTable: React.FC = () => {
       const itemData = await getItemById(id);
       console.log("Данные о товаре перед удалением:", itemData);
       const itemCopy = { ...itemData };
-      await softDeleteNdsById(id);
       setDeletedItems((prevItems) => ({
         ...prevItems,
         [id]: itemCopy,
       }));
+      await softDeleteNdsById(id);
       message.success("Товар успешно мягко удален.");
       fetchData();
     } catch (error) {
@@ -135,15 +135,14 @@ const NdsTable: React.FC = () => {
         return;
       }
       console.log("Восстанавливаем товар с ID:", id);
-      await restoreNdsById(id);
+      await restoreNdsById(id, deletedItem);
       console.log("Товар успешно восстановлен.");
       message.success("Товар успешно восстановлен.");
       setDeletedItems((prevItems) => {
-        const newItems = { ...prevItems };
-        delete newItems[id];
-        console.log("Обновленное состояние удаленных товаров:", newItems);
-        return newItems;
+        const { [id]: _, ...newDeletedItems } = prevItems;
+        return newDeletedItems;
       });
+
       fetchData();
     } catch (error) {
       message.error("Ошибка при восстановлении товара.");

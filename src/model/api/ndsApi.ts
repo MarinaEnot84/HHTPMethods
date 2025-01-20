@@ -134,16 +134,13 @@ export const softDeleteNdsById = async (id: string) => {
   return response.data;
 };
 
-export const restoreNdsById = async (id: string) => {
-  const response = await apiClient.put(
-    `/api/nds/${id}`,
-    {},
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+export const restoreNdsById = async (id: string, itemData: any) => {
+  const response = await apiClient.put(`/api/nds/${id}`, itemData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  console.log("Ответ сервера при восстановлении:", response.data);
   return response.data;
 };
 
